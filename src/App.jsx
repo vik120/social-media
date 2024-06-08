@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Sidebar from "./components/Sidebar";
+import CreatePost from "./components/CreatePost";
+import PostList from "./components/PostList";
+import PostListProvider from "./store/Post.store";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedTab, setSelectedTab] = useState("");
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <PostListProvider>
+        <Header />
+        <div className="container-fluid h-100">
+          <div className="row">
+            <Sidebar
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+            />
+            <main
+              className="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5 pb-3"
+              style={{ minHeight: "790px" }}
+            >
+              {selectedTab === "create post" ? (
+                <CreatePost></CreatePost>
+              ) : (
+                <PostList />
+              )}
+            </main>
+          </div>
+        </div>
+        <Footer />
+      </PostListProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
