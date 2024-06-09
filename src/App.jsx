@@ -25,7 +25,7 @@ function App() {
               style={{ minHeight: "790px" }}
             >
               {selectedTab === "create post" ? (
-                <CreatePost></CreatePost>
+                <CreatePost setSelectedTab={setSelectedTab}></CreatePost>
               ) : (
                 <PostList />
               )}

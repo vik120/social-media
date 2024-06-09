@@ -6,29 +6,29 @@ import PostListProvider, { CreateContext } from "../store/Post.store";
 function Post({item}) {
   const {deletePost} = useContext(CreateContext);
   return (
-    <div className="card">
+    <div className="card mb-3">
       <img src={item.thumbnail} className="card-img-top" alt="..." />
       <div className="card-body">
-        <h5 className="card-title">{item.title}</h5>
+        <h5 className="card-title">{ item.id} {item.title}</h5>
         <div className="mb-3">
           <span>
           <FaRegEye /> {item.views}
           </span>
           <span className="mx-3">
-          <SlLike /> {item.reactions.likes || 0}
+          <SlLike /> {item.reactions?.likes || (item.views / 2) || 0}
           </span>
           <span>
-          <SlDislike /> {item.reactions.dislikes || 0}</span>
+          <SlDislike /> {item.reactions?.dislikes || (item.views / 2) || 0}</span>
         </div>
         <p className="card-text">
-        {item.body.length > 100 ? item.body.substring(0, 100) + '...' : item.body}
+        {item.description?.length > 100 ? item.description?.substring(0, 100) + '...' : item.description}
         </p>
         {
-          item.tags.length > 0 ?  <div className="mb-4">
+          item.tags?.length > 0 ?  <div className="mb-4">
           {
             item.tags.map((tag) => {
               return (
-                <span key={tag} className="badge rounded-pill text-bg-secondary">{tag}</span>
+                <span key={tag} className="badge rounded-pill text-bg-secondary">{tag.trim()}</span>
               )
             })
           }
