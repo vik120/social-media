@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useCallback, useReducer } from "react";
 import PropTypes from "prop-types";
 
 const DEFAULT_CONTEXT = {
@@ -37,12 +37,12 @@ const PostListProvider = function ({ children }) {
       payload: { postInfo },
     });
   };
-  const DeletePost = (postid) => {
+  const DeletePost = useCallback((postid) => {
     dispatchPostList({
       type: "DELETE_POST",
       payload: { postid },
     });
-  };
+  }, [dispatchPostList]);
 
 
   const GetPost = (posts) => {
