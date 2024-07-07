@@ -1,14 +1,15 @@
-import React, { createContext, useCallback, useReducer } from "react";
+import React, { createContext, useCallback, useReducer, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const DEFAULT_CONTEXT = {
   postList: [],
-  addPost: () => {},
-  deletePost: () => {},
-  getPost: () => {}
+  addPost: () => { },
+  deletePost: () => { }, 
+  fetching: false
 };
 
 export const CreateContext = createContext(DEFAULT_CONTEXT);
+
 
 const PostListReducer = (currentPostList, Action) => {
   let newPostList = currentPostList;
@@ -18,7 +19,7 @@ const PostListReducer = (currentPostList, Action) => {
     );
   } else if (Action.type == "ADD_POST") {
     newPostList = [...currentPostList, Action.payload.postInfo]
-  } else if(Action.type == 'GET_POST') {
+  } else if (Action.type == 'GET_POST') {
     newPostList = Action.payload.posts
   }
   return newPostList;
@@ -30,8 +31,9 @@ const PostListProvider = function ({ children }) {
     DEFAULT_POST_LIST
   ); // useReducer (reducerFunction, initial value of list)
 
+  const [fetching, setFetching] = useState(false); // useState always work with square braces
   const AddPost = (postInfo) => {
-    
+
     dispatchPostList({
       type: "ADD_POST",
       payload: { postInfo },
@@ -52,9 +54,38 @@ const PostListProvider = function ({ children }) {
     });
   }
 
+  useEffect(() => {
+    setFetching(true);
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    fetch("https://dummyjson.com/products", { signal })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.products);
+        // eslint-disable-next-line no-const-assign
+         
+        GetPost(data.products)
+        setFetching(false);
+      })
+      .catch((error) => {
+        if (error.name === "AbortError") {
+          console.log("Fetch aborted.");
+        } else {
+          console.error("Fetch error:", error);
+        }
+    //    setFetching(false);
+      });
+
+    return () => {
+      console.log("Cleaning up UseEffect.");
+      controller.abort(); //abort the effects on distroy the component
+    };
+  }, []); // if 2nd param is not passed than it will be infinite loop
+
   return (
     <CreateContext.Provider
-      value={{ postList: PostList, addPost: AddPost, deletePost: DeletePost, getPost: GetPost }}
+      value={{ postList: PostList, addPost: AddPost, deletePost: DeletePost, fetching }}
     >
       {children}
     </CreateContext.Provider>

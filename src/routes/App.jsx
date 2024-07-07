@@ -1,11 +1,12 @@
 import { useState } from "react";
 import "./App.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Sidebar from "./components/Sidebar";
-import CreatePost from "./components/CreatePost";
-import PostList from "./components/PostList";
-import PostListProvider from "./store/Post.store";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Sidebar from "../components/Sidebar";
+import CreatePost from "../components/CreatePost";
+import PostList from "../components/PostList";
+import PostListProvider from "../store/Post.store";
+import { Outlet } from "react-router-dom";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState("");
@@ -24,11 +25,7 @@ function App() {
               className="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5 pb-3"
               style={{ minHeight: "790px" }}
             >
-              {selectedTab === "create post" ? (
-                <CreatePost setSelectedTab={setSelectedTab}></CreatePost>
-              ) : (
-                <PostList />
-              )}
+              <Outlet />
             </main>
           </div>
         </div>

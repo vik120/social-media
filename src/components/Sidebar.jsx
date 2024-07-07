@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet, Link, NavLink } from "react-router-dom";
 
 function Sidebar({selectedTab, setSelectedTab}) {
   return (
@@ -10,16 +11,14 @@ function Sidebar({selectedTab, setSelectedTab}) {
     <hr />
     <ul className="nav nav-pills flex-column mb-auto">
       <li className="nav-item" onClick={() => setSelectedTab('')}>
-        <a href="#" className={`nav-link text-white ${selectedTab == '' && 'active'}`} aria-current="page">
-          <svg className="bi pe-none me-2" width="16" height="16"><use xlinkHref="#home"></use></svg>
+        <NavLink to='/' className='nav-link text-white' aria-current="page"> 
           Post
-        </a>
+        </NavLink>
       </li>
       <li>
-        <a href="#"  className={`nav-link text-white ${selectedTab == 'create post' && 'active'}`}   onClick={() => setSelectedTab('create post')}>
-          <svg className="bi pe-none me-2" width="16" height="16"><use xlinkHref="#speedometer2"></use></svg>
+      <NavLink to='/create-post' className={  ({ isActive }) =>  isActive ? "nav-link text-white active" : "nav-link text-white" }> 
           Create Post
-        </a>
+        </NavLink>
       </li>
        
     </ul>
